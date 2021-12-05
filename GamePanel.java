@@ -13,12 +13,12 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE;
-    static final int DELAY =  75;
+    static final int DELAY =  600;
     Timer timer;    
     RandomNumGenerator rng;
     Snake snake = new Snake(300, 300);
 
-        public GamePanel()
+    public GamePanel()
     {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
@@ -30,10 +30,13 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
         snake.move(UNIT_SIZE);
+        repaint();
+       
     }
     public void startGame()
     {
         timer = new Timer(DELAY, this);
+        timer.start();
     }
     public void paintComponent(Graphics g)
     {
@@ -60,14 +63,25 @@ public class GamePanel extends JPanel implements ActionListener {
         rng = new RandomNumGenerator();      
         
         g.setColor(Color.red);      
+        g.fillRect(100, 400, UNIT_SIZE, UNIT_SIZE);
+    }
+    public void newApple(Graphics g)
+    {
+        rng = new RandomNumGenerator();      
+        
+        g.setColor(Color.red);      
         g.fillRect(rng.getRandomNumber(SCREEN_WIDTH / UNIT_SIZE)*UNIT_SIZE, rng.getRandomNumber(SCREEN_HEIGHT / UNIT_SIZE)*UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
     }
     public void drawSnake(Graphics g)
     {
-        g.setColor(Color.green);
-        //for (int i = 0; i < 3; i++)
+        g.setColor(Color.green);           
+        g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);            
+        
+        g.setColor(Color.blue);
+        for (int i = 0; i < snake.getBodyPartsX().size(); i++)
         {
-            g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);            
+            //g.fillRect(snake.getBodyPartsX().get(i), snake.getBodyPartsY().get(i), UNIT_SIZE, UNIT_SIZE);            
+            g.fillRect(snake.getBodyParts().get(i).getSnakeBodyX(), snake.getBodyParts().get(i).getSnakeBodyY(), UNIT_SIZE, UNIT_SIZE);       
         }
         
     }
