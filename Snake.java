@@ -82,6 +82,10 @@ public class Snake {
     {
         return bodyParts;       
     }
+    public char getDirection()
+    {
+        return direction;
+    }
 
     //Set Methods
     public void setDirection(char direction)

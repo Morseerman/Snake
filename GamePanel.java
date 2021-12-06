@@ -95,17 +95,17 @@ public class GamePanel extends JPanel implements ActionListener {
         {
             switch (e.getKeyCode()) 
             {
-                case KeyEvent.VK_LEFT:
-                snake.setDirection('L');                                    
+                case KeyEvent.VK_A:
+                if (snake.getDirection() != 'R') snake.setDirection('L');                                                    
                 break;     
-                case KeyEvent.VK_UP:
-                snake.setDirection('U');                                    
+                case KeyEvent.VK_W:
+                if (snake.getDirection() != 'D') snake.setDirection('U');                                    
                 break;   
-                case KeyEvent.VK_RIGHT:
-                snake.setDirection('R');                                    
+                case KeyEvent.VK_D:
+                if (snake.getDirection() != 'L') snake.setDirection('R');                                    
                 break;     
-                case KeyEvent.VK_DOWN:
-                snake.setDirection('D');                                    
+                case KeyEvent.VK_S:
+                if (snake.getDirection() != 'U') snake.setDirection('D');                                    
                 break;       
                 
             }
