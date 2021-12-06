@@ -74,14 +74,33 @@ public class GamePanel extends JPanel implements ActionListener {
     }
     public void drawSnake(Graphics g)
     {
+        //Heah of Snake
         g.setColor(Color.green);           
         g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);            
         
-        g.setColor(Color.blue);
-        for (int i = 0; i < snake.getBodyPartsX().size(); i++)
-        {
-            //g.fillRect(snake.getBodyPartsX().get(i), snake.getBodyPartsY().get(i), UNIT_SIZE, UNIT_SIZE);            
+        //Body of snake
+        g.setColor(new Color(100, 220, 50));
+        for (int i = 0; i < snake.getBodyParts().size(); i++)
+        {                
             g.fillRect(snake.getBodyParts().get(i).getSnakeBodyX(), snake.getBodyParts().get(i).getSnakeBodyY(), UNIT_SIZE, UNIT_SIZE);       
+        }
+        
+    }
+
+    public class MyKeyAdapter extends KeyAdapter {
+       
+        public void KeyPressed(KeyEvent e)
+        {
+            switch (e.getKeyCode()) 
+            {
+                case KeyEvent.VK_LEFT:
+                snake.setDirection('L');                                    
+                break;     
+                case KeyEvent.VK_UP:
+                snake.setDirection('U');                                    
+                break;        
+                
+            }
         }
         
     }

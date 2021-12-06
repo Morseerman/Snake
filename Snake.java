@@ -4,11 +4,9 @@ import java.awt.*;
 
 public class Snake {
 
-    //Data
-    private static ArrayList<Integer> bodyPartsX = new ArrayList<Integer>();
-    private static ArrayList<Integer> bodyPartsY = new ArrayList<Integer>();
+    //Data    
     private static ArrayList<SnakeBody> bodyParts = new ArrayList<SnakeBody>();
-    private int length = bodyPartsX.size();
+    private int length = bodyParts.size();
     private char direction = 'L';
     private int snakeX;
     private int snakeY;
@@ -17,13 +15,7 @@ public class Snake {
     public Snake(int snakeX, int snakeY)
     {    
         this.snakeX = snakeX;
-        this.snakeY = snakeY;    
-        
-        //Adding  2 body parts
-        bodyPartsX.add(300);
-        bodyPartsY.add(300);
-        bodyPartsX.add(300);
-        bodyPartsY.add(300);
+        this.snakeY = snakeY;       
 
         bodyParts.add(new SnakeBody(300, 300));
         bodyParts.add(new SnakeBody(300, 300));
@@ -35,21 +27,27 @@ public class Snake {
 
     //Main Methods
     public void move(int UNIT_SIZE)
-    {        
+    {     
+        //Tails  Following head   
         for (int i = bodyParts.size() - 1; i > 0; i--)
         {    
-            //all tail follow previous piece
+            
             if (i != 0)
-            {
-                //System.out.println("Body ^ " + i + ": " + bodyParts.get(i).getSnakeBodyX() + "");
-                bodyParts.set(i, bodyParts.get(i - 1));  
-                //System.out.println("Body v" + i + ": " + bodyParts.get(i).getSnakeBodyX() + "\n");
+            {         
+                bodyParts.get(i).setSnakeBodyX(bodyParts.get(i - 1).getSnakeBodyX());               
             }                            
                         
         } 
         bodyParts.get(0).setSnakeBodyX(snakeX);
 
-        snakeX -= UNIT_SIZE;    
+        //Moving Head
+        snakeX -= UNIT_SIZE;
+        
+        //Temp Collision
+        if (snakeX < 0)
+        {
+            snakeX = 600;
+        }
        
     }
 
@@ -61,18 +59,16 @@ public class Snake {
     public int getSnakeY()
     {
         return snakeY;
-    }
-    public ArrayList<Integer> getBodyPartsX()
-    {
-        return bodyPartsX;
-    }
-    public ArrayList<Integer> getBodyPartsY()
-    {
-        return bodyPartsY;
-    }
+    }    
     public ArrayList<SnakeBody> getBodyParts()
     {
         return bodyParts;       
+    }
+
+    //Set Methods
+    public void setDirection(char direction)
+    {
+        this.direction = direction;
     }
 
    
