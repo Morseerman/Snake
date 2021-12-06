@@ -3,12 +3,16 @@ import javax.swing.plaf.DimensionUIResource;
 
 
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.awt.*;
 import javax.swing.*;
 
 
 public class GamePanel extends JPanel implements ActionListener {
 
+    
     static final int SCREEN_WIDTH = 600;
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 50;
@@ -35,13 +39,15 @@ public class GamePanel extends JPanel implements ActionListener {
         timer = new Timer(DELAY, this);
         timer.start();
     }
-    public boolean eatenApple()
+    public void checkEatenApple()
     {
         if (snake.getSnakeX() == appleX && snake.getSnakeY() == appleY)
         {
-            return true;
+            snake.grow();
+            newApple();           
+            System.out.println("Length: " + snake.getLength());
         }
-        return  false;
+        
     }
     public void checkWallCollisionEasyMode()
     {
@@ -68,20 +74,25 @@ public class GamePanel extends JPanel implements ActionListener {
         
         if (snake.getSnakeX() < 0)
         {
-            timer.stop();
+            gameOver();
         }
         else if (snake.getSnakeX() > SCREEN_WIDTH - UNIT_SIZE)
         {
-            timer.stop();
+            gameOver();
         }
         if (snake.getSnakeY() < 0)
         {
-            timer.stop();
+            gameOver();
         }
         else if (snake.getSnakeY() > SCREEN_HEIGHT - UNIT_SIZE)
         {
-            timer.stop();
+            gameOver();
         }
+    }
+
+    public void gameOver()
+    {
+        timer.stop();
     }
 
     //----------Painting Game-------------------------
@@ -133,6 +144,18 @@ public class GamePanel extends JPanel implements ActionListener {
         g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);    
         
     }
+
+    //----------------------File Handling------------------------------
+    public void highScore() throws IOException
+    {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("HighScore.txt"));
+
+        bw.write("Poo");
+        bw.write("wee");
+
+        bw.close();
+    }
+
     //----------------------Event  Handling----------------------------
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -142,16 +165,11 @@ public class GamePanel extends JPanel implements ActionListener {
         checkWallCollisionHardMode();
         if (snake.checkTailCollision() == true)
         {
-            timer.stop();
+            gameOver();
         }
 
-        if (eatenApple())
-        {
-            snake.grow();
-            newApple();
-            System.out.println("Length: " + snake.getLength());
-        } 
-
+        checkEatenApple();
+        
         repaint();
        
     }
