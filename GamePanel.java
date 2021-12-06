@@ -3,7 +3,10 @@ import javax.swing.plaf.DimensionUIResource;
 
 
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.awt.*;
@@ -38,6 +41,14 @@ public class GamePanel extends JPanel implements ActionListener {
     {
         timer = new Timer(DELAY, this);
         timer.start();
+        
+        try {
+            System.out.println("Current HighScore: " + getHighScore());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
     }
     public void checkEatenApple()
     {
@@ -93,6 +104,14 @@ public class GamePanel extends JPanel implements ActionListener {
     public void gameOver()
     {
         timer.stop();
+
+        try 
+        {
+            checkHighScore();
+        } catch (IOException e) 
+        {            
+            e.printStackTrace();
+        }
     }
 
     //----------Painting Game-------------------------
@@ -146,14 +165,32 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     //----------------------File Handling------------------------------
-    public void highScore() throws IOException
+    public void checkHighScore() throws IOException
     {
-        BufferedWriter bw = new BufferedWriter(new FileWriter("HighScore.txt"));
+        BufferedWriter bw;
+        BufferedReader br = new BufferedReader(new FileReader("HighScore.txt"));
+        
+        String text = br.readLine();
+        int highScore = Integer.parseInt(text);
+        if (highScore < snake.getLength())
+        {            
+            System.out.println("NEW HIGHSCORE!!! : " + snake.getLength());
 
-        bw.write("Poo");
-        bw.write("wee");
+            bw = new BufferedWriter(new FileWriter("HighScore.txt"));
+            bw.write(String.valueOf(snake.getLength()));
+            bw.close();
+            
+            
+        }        
 
-        bw.close();
+        br.close();       
+    }
+    public int getHighScore() throws IOException
+    {
+        BufferedReader br = new BufferedReader(new FileReader("HighScore.txt"));
+        
+        String text = br.readLine();
+        return Integer.parseInt(text);
     }
 
     //----------------------Event  Handling----------------------------
@@ -169,7 +206,7 @@ public class GamePanel extends JPanel implements ActionListener {
         }
 
         checkEatenApple();
-        
+
         repaint();
        
     }

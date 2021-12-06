@@ -12,7 +12,7 @@ public class GameFrame extends JFrame {
         this.setResizable(false);
         this.pack();
         this.setVisible(true);
-        this.setLocation(null);
+        //this.setLocation(null);
     }
      
 }
