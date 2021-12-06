@@ -11,7 +11,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     static final int SCREEN_WIDTH = 600;
     static final int SCREEN_HEIGHT = 600;
-    static final int UNIT_SIZE = 25;
+    static final int UNIT_SIZE = 50;
     static final int GAME_UNITS = SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE;
     static final int DELAY =  200;
     int appleX = 100;
@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements ActionListener {
     RandomNumGenerator rng;
     Snake snake = new Snake(300, 300);
 
+    //----------------------------------Running  the  Game------------------------------
     public GamePanel()
     {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -28,21 +29,7 @@ public class GamePanel extends JPanel implements ActionListener {
         this.addKeyListener(new MyKeyAdapter());
         startGame();
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-
-        snake.move(UNIT_SIZE); 
-        if (eatenApple())
-        {
-            snake.grow();
-            newApple();
-        } 
-
-        repaint();
-       
-    }
+   
     public void startGame()
     {
         timer = new Timer(DELAY, this);
@@ -56,8 +43,48 @@ public class GamePanel extends JPanel implements ActionListener {
         }
         return  false;
     }
+    public void checkWallCollisionEasyMode()
+    {
+        
+        if (snake.getSnakeX() < 0)
+        {
+            snake.setSnakeX(SCREEN_WIDTH - UNIT_SIZE);
+        }
+        else if (snake.getSnakeX() > SCREEN_WIDTH - UNIT_SIZE)
+        {
+            snake.setSnakeX(0);
+        }
+        if (snake.getSnakeY() < 0)
+        {
+            snake.setSnakeY(SCREEN_HEIGHT - UNIT_SIZE);
+        }
+        else if (snake.getSnakeY() > SCREEN_HEIGHT - UNIT_SIZE)
+        {
+            snake.setSnakeY(0);
+        }
+    }
+    public void checkWallCollisionHardMode()
+    {
+        
+        if (snake.getSnakeX() < 0)
+        {
+            timer.stop();
+        }
+        else if (snake.getSnakeX() > SCREEN_WIDTH - UNIT_SIZE)
+        {
+            timer.stop();
+        }
+        if (snake.getSnakeY() < 0)
+        {
+            timer.stop();
+        }
+        else if (snake.getSnakeY() > SCREEN_HEIGHT - UNIT_SIZE)
+        {
+            timer.stop();
+        }
+    }
 
-    //Painting Game
+    //----------Painting Game-------------------------
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
@@ -87,12 +114,11 @@ public class GamePanel extends JPanel implements ActionListener {
     }
     public void newApple()
     {
-        rng = new RandomNumGenerator();      
-        
-        //g.setColor(Color.red);      
+        rng = new RandomNumGenerator();    
+          
         appleX = rng.getRandomNumber(SCREEN_WIDTH / UNIT_SIZE)*UNIT_SIZE;        
         appleY = rng.getRandomNumber(SCREEN_HEIGHT / UNIT_SIZE)*UNIT_SIZE;
-        //g.fillRect(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+      
     }
     public void drawSnake(Graphics g)
     {
@@ -107,7 +133,28 @@ public class GamePanel extends JPanel implements ActionListener {
         g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);    
         
     }
+    //----------------------Event  Handling----------------------------
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
 
+        snake.move(UNIT_SIZE); 
+        checkWallCollisionHardMode();
+        if (snake.checkTailCollision() == true)
+        {
+            timer.stop();
+        }
+
+        if (eatenApple())
+        {
+            snake.grow();
+            newApple();
+            System.out.println("Length: " + snake.getLength());
+        } 
+
+        repaint();
+       
+    }
     public class MyKeyAdapter extends KeyAdapter
      {
         @Override

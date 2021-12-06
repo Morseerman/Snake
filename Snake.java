@@ -6,7 +6,7 @@ public class Snake {
 
     //Data    
     private static ArrayList<SnakeBody> bodyParts = new ArrayList<SnakeBody>();
-    private int length = bodyParts.size();
+    private int length;
     private char direction = 'L';
     private int snakeX;
     private int snakeY;
@@ -18,10 +18,7 @@ public class Snake {
         this.snakeY = snakeY;       
 
         bodyParts.add(new SnakeBody(300, 300));
-        bodyParts.add(new SnakeBody(300, 300));
-        bodyParts.add(new SnakeBody(300, 300));
-        bodyParts.add(new SnakeBody(300, 300));
-                
+        bodyParts.add(new SnakeBody(300, 300));                     
        
     }
 
@@ -47,31 +44,24 @@ public class Snake {
         if (direction == 'U') snakeY -= UNIT_SIZE;
         if (direction == 'R') snakeX += UNIT_SIZE;
         if (direction == 'D') snakeY += UNIT_SIZE;
-        
-        
-        //Temp Collision
-        if (snakeX < 0)
-        {
-            snakeX = 600;
-        }
-        else if (snakeX > 600)
-        {
-            snakeX = 0;
-        }
-        if (snakeY < 0)
-        {
-            snakeY = 600;
-        }
-        else if (snakeY > 600)
-        {
-            snakeY = 0;
-        }
-       
+
     }
     public void grow()
     {
         bodyParts.add(new SnakeBody(snakeX, snakeY));
-    }
+        length = bodyParts.size() + 1; // +1 To account  for head
+    }   
+    public boolean checkTailCollision()
+    {
+        for (int i = 0; i < bodyParts.size(); i++)
+        {
+            if (snakeX == bodyParts.get(i).snakeBodyX && snakeY == bodyParts.get(i).snakeBodyY)
+            {
+                return true;
+            }
+        }
+        return false;
+    } 
 
     //Get Methods
     public int getSnakeX()
@@ -90,15 +80,26 @@ public class Snake {
     {
         return direction;
     }
+    public int getLength()
+    {
+        return length;
+    }
 
     //Set Methods
     public void setDirection(char direction)
     {
         this.direction = direction;
     }
-
+    public void setSnakeX(int snakeX)
+    {
+        this.snakeX = snakeX;
+    }
+    public void setSnakeY(int snakeY)
+    {
+        this.snakeY = snakeY;
+    }
    
-    
+    //Sub Class
     public class SnakeBody 
     {
         private int snakeBodyX;
@@ -109,11 +110,7 @@ public class Snake {
             this.snakeBodyX = snakeBodyX;
             this.snakeBodyY = snakeBodyY;
         }
-        SnakeBody()
-        {
-            
-        }
-
+      
         public int getSnakeBodyX()
         {
             return snakeBodyX;
