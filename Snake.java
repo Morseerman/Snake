@@ -68,6 +68,10 @@ public class Snake {
         }
        
     }
+    public void grow()
+    {
+        bodyParts.add(new SnakeBody(snakeX, snakeY));
+    }
 
     //Get Methods
     public int getSnakeX()
@@ -104,6 +108,10 @@ public class Snake {
         {
             this.snakeBodyX = snakeBodyX;
             this.snakeBodyY = snakeBodyY;
+        }
+        SnakeBody()
+        {
+            
         }
 
         public int getSnakeBodyX()

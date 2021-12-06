@@ -14,6 +14,8 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE;
     static final int DELAY =  200;
+    int appleX = 100;
+    int appleY = 400;
     Timer timer;    
     RandomNumGenerator rng;
     Snake snake = new Snake(300, 300);
@@ -30,7 +32,14 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
-        snake.move(UNIT_SIZE);        
+
+        snake.move(UNIT_SIZE); 
+        if (eatenApple())
+        {
+            snake.grow();
+            newApple();
+        } 
+
         repaint();
        
     }
@@ -39,6 +48,16 @@ public class GamePanel extends JPanel implements ActionListener {
         timer = new Timer(DELAY, this);
         timer.start();
     }
+    public boolean eatenApple()
+    {
+        if (snake.getSnakeX() == appleX && snake.getSnakeY() == appleY)
+        {
+            return true;
+        }
+        return  false;
+    }
+
+    //Painting Game
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
@@ -64,27 +83,28 @@ public class GamePanel extends JPanel implements ActionListener {
         rng = new RandomNumGenerator();      
         
         g.setColor(Color.red);      
-        g.fillRect(100, 400, UNIT_SIZE, UNIT_SIZE);
+        g.fillRect(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
     }
-    public void newApple(Graphics g)
+    public void newApple()
     {
         rng = new RandomNumGenerator();      
         
-        g.setColor(Color.red);      
-        g.fillRect(rng.getRandomNumber(SCREEN_WIDTH / UNIT_SIZE)*UNIT_SIZE, rng.getRandomNumber(SCREEN_HEIGHT / UNIT_SIZE)*UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
+        //g.setColor(Color.red);      
+        appleX = rng.getRandomNumber(SCREEN_WIDTH / UNIT_SIZE)*UNIT_SIZE;        
+        appleY = rng.getRandomNumber(SCREEN_HEIGHT / UNIT_SIZE)*UNIT_SIZE;
+        //g.fillRect(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
     }
     public void drawSnake(Graphics g)
     {
-        //Heah of Snake
-        g.setColor(Color.green);           
-        g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);            
-        
         //Body of snake
-        g.setColor(new Color(100, 220, 50));
+        g.setColor(new Color(100, 180, 50));
         for (int i = 0; i < snake.getBodyParts().size(); i++)
         {                
             g.fillRect(snake.getBodyParts().get(i).getSnakeBodyX(), snake.getBodyParts().get(i).getSnakeBodyY(), UNIT_SIZE, UNIT_SIZE);       
         }
+        //Heah of Snake
+        g.setColor(Color.green);           
+        g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);    
         
     }
 
