@@ -13,7 +13,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE;
-    static final int DELAY =  600;
+    static final int DELAY =  200;
     Timer timer;    
     RandomNumGenerator rng;
     Snake snake = new Snake(300, 300);
@@ -23,13 +23,14 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
+        this.addKeyListener(new MyKeyAdapter());
         startGame();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
-        snake.move(UNIT_SIZE);
+        snake.move(UNIT_SIZE);        
         repaint();
        
     }
@@ -87,9 +88,10 @@ public class GamePanel extends JPanel implements ActionListener {
         
     }
 
-    public class MyKeyAdapter extends KeyAdapter {
-       
-        public void KeyPressed(KeyEvent e)
+    public class MyKeyAdapter extends KeyAdapter
+     {
+        @Override
+        public void keyPressed(KeyEvent e)
         {
             switch (e.getKeyCode()) 
             {
@@ -98,7 +100,13 @@ public class GamePanel extends JPanel implements ActionListener {
                 break;     
                 case KeyEvent.VK_UP:
                 snake.setDirection('U');                                    
-                break;        
+                break;   
+                case KeyEvent.VK_RIGHT:
+                snake.setDirection('R');                                    
+                break;     
+                case KeyEvent.VK_DOWN:
+                snake.setDirection('D');                                    
+                break;       
                 
             }
         }

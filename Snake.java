@@ -28,25 +28,43 @@ public class Snake {
     //Main Methods
     public void move(int UNIT_SIZE)
     {     
-        //Tails  Following head   
+        //Tails Following head   
         for (int i = bodyParts.size() - 1; i > 0; i--)
         {    
             
             if (i != 0)
             {         
-                bodyParts.get(i).setSnakeBodyX(bodyParts.get(i - 1).getSnakeBodyX());               
+                bodyParts.get(i).setSnakeBodyX(bodyParts.get(i - 1).getSnakeBodyX());   
+                bodyParts.get(i).setSnakeBodyY(bodyParts.get(i - 1).getSnakeBodyY());               
             }                            
                         
         } 
         bodyParts.get(0).setSnakeBodyX(snakeX);
+        bodyParts.get(0).setSnakeBodyY(snakeY);
 
         //Moving Head
-        snakeX -= UNIT_SIZE;
+        if (direction == 'L') snakeX -= UNIT_SIZE;
+        if (direction == 'U') snakeY -= UNIT_SIZE;
+        if (direction == 'R') snakeX += UNIT_SIZE;
+        if (direction == 'D') snakeY += UNIT_SIZE;
+        
         
         //Temp Collision
         if (snakeX < 0)
         {
             snakeX = 600;
+        }
+        else if (snakeX > 600)
+        {
+            snakeX = 0;
+        }
+        if (snakeY < 0)
+        {
+            snakeY = 600;
+        }
+        else if (snakeY > 600)
+        {
+            snakeY = 0;
         }
        
     }
