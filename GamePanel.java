@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 50;
     static final int GAME_UNITS = SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE;
-    static final int DELAY =  200;
+    static final int DELAY =  120;
     int appleX = 100;
     int appleY = 400;
     Timer timer;    
@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements ActionListener {
     {
         timer = new Timer(DELAY, this);
         timer.start();
-        
+
         try {
             System.out.println("Current HighScore: " + getHighScore());
         } catch (IOException e) {
@@ -100,7 +100,14 @@ public class GamePanel extends JPanel implements ActionListener {
             gameOver();
         }
     }
-
+    public void newApple()
+    {
+        rng = new RandomNumGenerator();    
+          
+        appleX = rng.getRandomNumber(SCREEN_WIDTH / UNIT_SIZE)*UNIT_SIZE;        
+        appleY = rng.getRandomNumber(SCREEN_HEIGHT / UNIT_SIZE)*UNIT_SIZE;
+      
+    }
     public void gameOver()
     {
         timer.stop();
@@ -111,6 +118,15 @@ public class GamePanel extends JPanel implements ActionListener {
         } catch (IOException e) 
         {            
             e.printStackTrace();
+        }
+    }
+    public void superAwsomeRainbowMode(Graphics g)
+    {
+       
+        for (int i = 0; i < snake.getBodyParts().size(); i++)
+        {         
+            g.setColor(new Color(rng.getRandomNumber(256), rng.getRandomNumber(150), rng.getRandomNumber(256)));       
+            g.fillRect(snake.getBodyParts().get(i).getSnakeBodyX(), snake.getBodyParts().get(i).getSnakeBodyY(), UNIT_SIZE, UNIT_SIZE);       
         }
     }
 
@@ -142,22 +158,23 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setColor(Color.red);      
         g.fillRect(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
     }
-    public void newApple()
-    {
-        rng = new RandomNumGenerator();    
-          
-        appleX = rng.getRandomNumber(SCREEN_WIDTH / UNIT_SIZE)*UNIT_SIZE;        
-        appleY = rng.getRandomNumber(SCREEN_HEIGHT / UNIT_SIZE)*UNIT_SIZE;
-      
-    }
+   
     public void drawSnake(Graphics g)
     {
-        //Body of snake
-        g.setColor(new Color(100, 180, 50));
-        for (int i = 0; i < snake.getBodyParts().size(); i++)
-        {                
-            g.fillRect(snake.getBodyParts().get(i).getSnakeBodyX(), snake.getBodyParts().get(i).getSnakeBodyY(), UNIT_SIZE, UNIT_SIZE);       
+        //Tail of Snake
+        if (snake.getLength() > 30)
+        {
+            superAwsomeRainbowMode(g);
         }
+        else
+        {
+            g.setColor(new Color(100, 180, 50));
+            for (int i = 0; i < snake.getBodyParts().size(); i++)
+            {                
+                g.fillRect(snake.getBodyParts().get(i).getSnakeBodyX(), snake.getBodyParts().get(i).getSnakeBodyY(), UNIT_SIZE, UNIT_SIZE);       
+            }
+        }
+        
         //Heah of Snake
         g.setColor(Color.green);           
         g.fillRect(snake.getSnakeX(), snake.getSnakeY(), UNIT_SIZE, UNIT_SIZE);    
